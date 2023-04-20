@@ -12,7 +12,7 @@ yarn start
 
 # 1-1) 사전과제 진행 가이드
 
-- 제공해드리는 API Repository를 활용하여 가이드에 따라 `Todo App`을 작성, 본인의 github에 `Public`으로 올려주세요. 
+- 제공해드리는 API Repository를 활용하여 가이드에 따라 `Todo App`을 작성, 본인의 github에 `Public`으로 올려주세요.
 - `README.md`를 꼭 작성해 주세요. 본인에 대한 소개나 프로젝트 소개 등 자유롭게 작성해주시면 됩니다.
 - 반드시 함수 컴포넌트로 개발해주세요. (React Hooks)
 

@@ -13,7 +13,7 @@ export const validateToken = (
   const token = req.headers.authorization;
   if (!token) {
     return res
-      .status(StatusCodes.UNAUTHORIZED)
+      .status(StatusCodes.BAD_REQUEST)
       .send(createError("Token is missing"));
   }
   next();
