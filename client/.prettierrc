@@ -1,0 +1,19 @@
+{
+  "arrowParens": "always",
+  "endOfLine": "auto",
+  "importOrder": [ "^@/(.*)$", "^@emotion(.*)$", "^@components/(.*)$", "^@parts/(.*)$", "^@contents/(.*)$", "^@styles/(.*)$", "^@static/(.*)$", "^[./]"  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 200
+      }
+    }
+  ],
+  "parser": "typescript",
+  "singleQuote": true,
+  "tabWidth": 4,
+  "trailingComma": "all"
+}
