@@ -6,6 +6,8 @@
         "src/components/*"
       ],
       "@/atoms/*": ["src/atoms/*"],
+      "@/aliases/*": ["src/aliases/*"],
+      "@/enums/*": ["src/enums/*"],
       "@/pages/*": ["src/pages/*"],
       "@/routes/*": ["src/routes/*"],
       "@/utils/*": ["src/utils/*"],

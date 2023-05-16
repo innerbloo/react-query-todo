@@ -1,17 +1,21 @@
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { SignUp } from '@/pages/auth';
-// import { SignUp } from 'src/pages/auth';
 import router from '@/routes/router';
+import globalStyles from '@/styles/global';
+import theme from '@/styles/theme';
 
-// import router from 'src/routes/router';
+import { Global, ThemeProvider } from '@emotion/react';
 
 function App() {
     return (
-        <>
-            {/*<RouterProvider router={router} />*/}
-            <SignUp />
-        </>
+        <ThemeProvider theme={theme}>
+            {/*@ts-ignore*/}
+            <Global styles={globalStyles} />
+            <RouterProvider router={router} />
+            {/*<ReactQueryDevtools />*/}
+        </ThemeProvider>
     );
 }
 
