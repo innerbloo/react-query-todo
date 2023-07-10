@@ -22,14 +22,9 @@ import { useInputs } from '@/hooks/form';
 import { LoginData } from '@/interfaces/common';
 import { emailValidation } from '@/utils/validation';
 
-function Copyright(props: any) {
+function Copyright() {
     return (
-        <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            {...props}
-        >
+        <Typography variant="body2" color="text.secondary" align="center">
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
                 Your Website
@@ -173,7 +168,7 @@ export default function Login() {
                                     </Link>
                                 </Grid>
                             </Grid>
-                            <Copyright sx={{ mt: 5 }} />
+                            <Copyright />
                         </Box>
                     </Box>
                 </Grid>

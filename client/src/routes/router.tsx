@@ -6,8 +6,10 @@ import {
     LOGOUT_URL,
     MAIN_URL,
     SIGN_UP_URL,
+    TODO_LIST_URL,
 } from '@/constants/index';
 import { Login, Root, SignUp } from '@/pages/index';
+import TodoList from '@/pages/todo/List';
 import { logoutLoader, mainLoader } from '@/routes/index';
 
 const router = createBrowserRouter([
@@ -26,12 +28,12 @@ const router = createBrowserRouter([
                 element: <Login />,
             },
             {
-                path: LOGIN_URL,
-                element: <Login />,
-            },
-            {
                 path: SIGN_UP_URL,
                 element: <SignUp />,
+            },
+            {
+                path: TODO_LIST_URL,
+                element: <TodoList />,
             },
         ],
     },
