@@ -1,4 +1,3 @@
-import CommentIcon from '@mui/icons-material/Comment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ButtonGroup } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
@@ -9,7 +8,6 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -17,19 +15,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import axios from 'axios/index';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import styled from 'styled-components';
+import { useState } from 'react';
 
-import { TOKEN } from '@/constants/common';
-import { CONTENT, EMAIL, PASSWORD, TITLE } from '@/constants/name';
-import { MAIN_URL } from '@/constants/url';
+import { CONTENT, TITLE } from '@/constants/name';
 import { useInputs } from '@/hooks/form';
-import { LoginData } from '@/interfaces/common';
-
-import api from '../../api/api';
+import useTodoDeleteMutation from '@/hooks/mutations/useTodoDeleteMutation';
+import useTodoMutation from '@/hooks/mutations/useTodoMutation';
+import useTodoUpdateMutation from '@/hooks/mutations/useTodoUpdateMutation';
+import useTodosQuery from '@/hooks/queries/useTodosQuery';
 
 const theme = createTheme();
 
@@ -46,67 +40,30 @@ export default function TodoList() {
         [CONTENT]: '',
     });
 
-    const { data: todos } = useQuery(['todos'], () => api.get('/todos'));
+    const { data: todos } = useTodosQuery();
 
-    const postMutation = useMutation(
-        (data: any) => {
-            return api.post('todos', data);
-        },
-        {
-            onError: (error: any, variable, context) => {
-                alert(error?.response?.data?.details);
-            },
-        },
-    );
-
-    const putMutation = useMutation(
-        (data: any) => {
-            return api.put(`todos/${data.id}`, data.data);
-        },
-        {
-            onError: (error: any, variable, context) => {
-                alert(error?.response?.data?.details);
-            },
-            onSuccess: (data, variables, context) => {
-                handleEdit('');
-            },
-        },
-    );
-
-    const deleteMutation = useMutation(
-        (id: string) => {
-            return api.delete(`todos/${id}`);
-        },
-        {
-            onError: (error: any, variable, context) => {
-                alert(error?.response?.data?.details);
-            },
-            onSuccess: (data, variables, context) => {
-                handleEdit('');
-            },
-        },
-    );
+    const { mutate: createTodoMutate } = useTodoMutation();
+    const { mutate: deleteTodoMutate } = useTodoDeleteMutation();
+    const { mutate: updateTodoMutate } = useTodoUpdateMutation();
 
     const handleSubmit = () => {
-        postMutation.mutate({
+        createTodoMutate({
             [TITLE]: inputStates[TITLE],
             [CONTENT]: inputStates[CONTENT],
         });
     };
 
     const handleUpdate = () => {
-        putMutation.mutate({
+        updateTodoMutate({
             id: editState,
-            data: {
-                [TITLE]: editInputStates[TITLE],
-                [CONTENT]: editInputStates[CONTENT],
-            },
+            [TITLE]: editInputStates[TITLE],
+            [CONTENT]: editInputStates[CONTENT],
         });
     };
 
     const handleDelete = (id: string) => {
         if (window.confirm('삭제하시겠습니까?')) {
-            deleteMutation.mutate(id);
+            deleteTodoMutate(id);
         }
     };
 
@@ -143,7 +100,7 @@ export default function TodoList() {
     };
 
     return (
-        <TodoListContainer>
+        <div>
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
@@ -313,10 +270,6 @@ export default function TodoList() {
                     </List>
                 </Container>
             </ThemeProvider>
-        </TodoListContainer>
+        </div>
     );
 }
-
-const TodoListContainer = styled.div`
-    //background: red;
-`;

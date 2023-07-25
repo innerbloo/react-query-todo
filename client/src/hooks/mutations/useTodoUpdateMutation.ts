@@ -1,0 +1,57 @@
+import { AxiosResponse } from 'axios';
+import { useMutation, useQueryClient } from 'react-query';
+
+import { updateTodo } from '@/hooks/queries/useTodosQuery';
+import { Todo, TodoReadSuccess, TodosReadSuccess } from '@/interfaces/list';
+
+const useTodoUpdateMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation(updateTodo, {
+        onMutate: async (newTodo: Todo) => {
+            await queryClient.cancelQueries({ queryKey: ['todos'] });
+            await queryClient.cancelQueries({ queryKey: ['todo', newTodo.id] });
+            const previousTodo = queryClient.getQueryData<
+                AxiosResponse<TodoReadSuccess>
+            >(['todo', newTodo.id]);
+            const previousTodos = queryClient.getQueryData<
+                AxiosResponse<TodosReadSuccess>
+            >(['todos']);
+            if (previousTodo && previousTodos) {
+                queryClient.setQueryData(['todo', newTodo.id], {
+                    ...previousTodo,
+                    data: {
+                        data: newTodo,
+                    },
+                });
+                queryClient.setQueryData(['todos'], {
+                    ...previousTodos,
+                    data: {
+                        data: previousTodos.data.data.map((todo) =>
+                            todo.id === newTodo.id ? newTodo : todo,
+                        ),
+                    },
+                });
+            }
+            return { previousTodo, previousTodos };
+        },
+        onError: (err, newTodo, context) => {
+            if (context?.previousTodo) {
+                queryClient.setQueryData(
+                    ['todo', newTodo.id],
+                    context.previousTodo,
+                );
+            }
+            if (context?.previousTodos) {
+                queryClient.setQueryData(['todos'], context.previousTodos);
+            }
+        },
+        onSettled: (data, error, newTodo) => {
+            queryClient.invalidateQueries({ queryKey: ['todos'] });
+            queryClient.invalidateQueries({
+                queryKey: ['todo', data?.data.data.id],
+            });
+        },
+    });
+};
+
+export default useTodoUpdateMutation;
